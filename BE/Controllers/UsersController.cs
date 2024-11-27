@@ -1,9 +1,14 @@
 ﻿using API.Data;
+using API.DTOs.InputDTOs;
+using API.DTOs.OutputDTOs;
 using API.Entities;
+using API.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace API.Controllers
 {
@@ -11,29 +16,51 @@ namespace API.Controllers
     public class UsersController : BaseController
     {
         private readonly DataContext _context;
-        public UsersController(DataContext context) 
+        private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
+        public UsersController(DataContext context, IUserRepository userRepository, IMapper mapper) 
         { 
             _context = context;
+            _userRepository = userRepository;
+            _mapper = mapper;
         }
 
-        [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AppUser>>> Get() 
+        public async Task<ActionResult<IEnumerable<UserOutputDto>>> Get() 
         {
-            List<AppUser> users = await _context.Users.ToListAsync();
+            var users = await _userRepository.GetAllAsync();
 
-            return Ok(users);
+            return Ok(_mapper.Map<IEnumerable<UserOutputDto>>(users));
         }
 
-        [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult<AppUser>> Get(int id)
+        public async Task<ActionResult<UserOutputDto>> Get(int id)
         {
-            AppUser? user = await _context.Users.FindAsync(id);
+            AppUser? user = await _userRepository.GetByIdAsync(id);
 
             if (user == null) return NotFound();
 
-            return Ok(user);
+            return Ok(_mapper.Map<UserOutputDto>(user));
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> Put(UserUpdateInputDto input)
+        {
+            string userName = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+
+            if(userName == null) return BadRequest("No username found in token!");
+
+            AppUser? user = await _userRepository.GetByNameAsync(userName);
+
+            if (user == null) return BadRequest($"User not found with name {userName}!");
+
+            _mapper.Map(input, user);
+
+            _userRepository.Update(user);
+
+            if (await _userRepository.SaveAllAsync()) return NoContent();
+
+            return BadRequest("Unable to update user!");
         }
     }
 }
