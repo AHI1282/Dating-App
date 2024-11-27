@@ -1,0 +1,12 @@
+<div class="p-5 m-4 bg-body-tertiary rounded-5">
+  <div class="container py-5">
+    @if (!showRegisterForm) {
+      <h1 class="display-5 fw-bold mb-0">Find Your Match</h1>
+      <p class="col-md-8 fs-4 mb-0">Come on in to view your matches...</p>
+      <p class="col-md-8 fs-4">all you need to do is sign up!</p>
+      <button class="btn btn-primary btn-lg" type="button" (click)="onRegister()">Register</button>
+    } @else {
+      <app-register [usersInput]="[]" (cancelRegister)="cancelRegister($event)"></app-register>
+    }
+  </div>
+</div>

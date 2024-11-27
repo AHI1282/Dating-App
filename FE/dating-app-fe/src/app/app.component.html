@@ -1,7 +1,12 @@
-<app-nav></app-nav>
+<div class="d-flex flex-column h-100">
+  <ngx-spinner>
+    Loading...
+  </ngx-spinner>
+  <app-nav></app-nav>
 
-<ul>
-  <li *ngFor="let user of users">
-    {{user.id}}, {{user.userName}}
-  </li>
-</ul>
+  <main class="flex-shrink-0">
+    <div class="container" style="margin-top: 4rem;">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>

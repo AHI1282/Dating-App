@@ -1,0 +1,10 @@
+img {
+  display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 58%;
+}
+
+input, textarea {
+  font-size: small;
+}

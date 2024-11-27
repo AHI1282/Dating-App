@@ -1,0 +1,20 @@
+/* .img-thumbnail {
+  margin: 35px;
+  width: 65%;
+  height: 65%;
+}
+
+.card-body {
+  padding: 0 15px;
+}
+
+.card-footer {
+  padding: 10px 15px;
+} */
+
+img {
+  display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+}
