@@ -88,7 +88,10 @@
               </button>
             </form>
           </tab>
-          <tab heading="Photos"></tab>
+          <tab heading="Photos">
+            <app-photo-upload [member]="member"
+              (memberChange)="onMemberChange($event)"></app-photo-upload>
+          </tab>
         </tabset>
       </div>
     </div>

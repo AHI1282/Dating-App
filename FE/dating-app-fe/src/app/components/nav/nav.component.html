@@ -17,6 +17,7 @@
 
       @if (accountsService.currentUser()) {
         <div class="btn-group" dropdown>
+          <img [src]="accountsService.currentUser()?.photoUrl || '../../../assets/user.png'" />
           <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle">
             Welcome {{accountsService.currentUser()?.userName}}<span class="caret"></span>
           </button>

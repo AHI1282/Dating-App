@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class AccountService {
-  private baseUrl: string = environment.baseUrl;
+  private baseUrl: string = environment.apiUrl;
   private http = inject(HttpClient);
   currentUser = signal<IUserModel | null>(null);
 
@@ -17,9 +17,7 @@ export class AccountService {
     return this.http.post<IUserModel>(`${this.baseUrl}/accounts/login`, input)
       .pipe(
         map(user => {
-          this.currentUser.set(user);
-          localStorage.setItem('user', JSON.stringify(user));
-          return user;
+          return this.setCurrentUser(user);
         })
       );
   }
@@ -27,11 +25,15 @@ export class AccountService {
   register = (input: ILoginModel): Observable<IUserModel> => {
     return this.http.post<IUserModel>(`${this.baseUrl}/accounts/register`, input).pipe(
       map(user => {
-        this.currentUser.set(user);
-        localStorage.setItem('user', JSON.stringify(user));
-        return user;
+        return this.setCurrentUser(user);
       })
     );
+  }
+
+  setCurrentUser = (user: IUserModel): IUserModel => {
+    this.currentUser.set(user);
+    localStorage.setItem('user', JSON.stringify(user));
+    return user;
   }
 
   logout = () => {

@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class MembersService {
   private http = inject(HttpClient);
-  private baseUrl = environment.baseUrl;
+  private baseUrl = environment.apiUrl;
 
   getMembers = () => {
     return this.http.get<IMemberModel[]>(`${this.baseUrl}/users`)
@@ -21,5 +21,13 @@ export class MembersService {
 
   updateProfile = (member: IMemberModel) => {
     return this.http.put<Observable<void>>(`${this.baseUrl}/users`, member);
+  }
+
+  setMainPhoto = (photoId: number) => {
+    return this.http.put<Observable<void>>(`${this.baseUrl}/users/photo/${photoId}/main`, {});
+  }
+
+  removePhoto = (photoId: number) => {
+    return this.http.delete<Observable<void>>(`${this.baseUrl}/users/photo/${photoId}`);
   }
 }

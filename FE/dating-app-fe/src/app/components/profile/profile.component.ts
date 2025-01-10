@@ -6,11 +6,12 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ToastrService } from 'ngx-toastr';
 import { GlobalService } from '../../services/global.service';
+import { PhotoUploadComponent } from "../photo-upload/photo-upload.component";
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [FormsModule, TabsModule],
+  imports: [FormsModule, TabsModule, PhotoUploadComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -52,5 +53,9 @@ export class ProfileComponent implements OnInit {
           this.globalService.isLoading.set(false);
         }
       })
+  }
+
+  onMemberChange = (event: IMemberModel) => {
+    this.member = event;
   }
 }
